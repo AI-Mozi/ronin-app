@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/javascript/tabs.js"></script>
 <h1>nmap</h1>
 
 <form action="/nmap" method="post">
@@ -18,7 +19,7 @@
   </div>
 
   <div class="field">
-    <label class="label is-required">Ports</label>
+    <label class="label">Ports</label>
 
     <div class="control">
       <% if @errors && @errors[:ports] %>
@@ -37,12 +38,22 @@
     <button type="submit" class="button is-primary">Scan</button>
   </div>
 
-  <div class="advanced">
-    <a class="advanced-toggle">Advanced Options</a>
+  <div class="tabs is-centered">
+    <ul>
+      <li class="is-active"><a data-tab-id="target">Target</a></li>
+      <li><a data-tab-id="host-discovery">Host Discovery</a></li>
+      <li><a data-tab-id="port-scanning">Port Scanning</a></li>
+      <li><a data-tab-id="scan-order">Scan Order</a></li>
+      <li><a data-tab-id="service-scan">Service Scan</a></li>
+      <li><a data-tab-id="os-detection">OS Detection</a></li>
+      <li><a data-tab-id="timing-and-performance">Timing and Performance</a></li>
+      <li><a data-tab-id="evasion-and-spoofing">Evasion and Spoofing</a></li>
+      <li><a data-tab-id="misc">Misc</a></li>
+    </ul>
+  </div>
 
-    <div class="advanced-content">
-      <h3>Target Options:</h3>
-
+  <div class="tabs-content">
+    <div id="target" class="content-tab is-active">
       <div class="field">
         <label class="label">Target File</label>
 
@@ -106,9 +117,9 @@
           <% end %>
         </div>
       </div>
+    </div>
 
-      <h3>Host Discovery Options:</h3>
-
+    <div id="host-discovery" class="content-tab">
       <div class="field">
         <label class="has-text-weight-semibold">Ping Scan:</label>
         <input class="checkbox" type="checkbox" name="ping"<%= " checked" if params[:ping] %>>
@@ -204,9 +215,9 @@
         <label class="has-text-weight-semibold">System DNS:</label>
         <input class="checkbox" type="checkbox" name="system_dns"<%= " checked" if params[:system_dns] %>>
       </div>
+    </div>
 
-      <h3>Port Scanning Options:</h3>
-
+    <div id="port-scanning" class="content-tab">
       <div class="field">
         <label class="has-text-weight-semibold">SYN Scan:</label>
         <input class="checkbox" type="checkbox" name="syn_scan"<%= " checked" if params[:syn_scan] %>>
@@ -320,9 +331,9 @@
           <% end %>
         </div>
       </div>
+    </div>
 
-      <h3>Scan Order Options:</h3>
-
+    <div id="scan-order" class="content-tab">
       <div class="field">
         <label class="label">Exclude Ports</label>
 
@@ -380,9 +391,9 @@
           <% end %>
         </div>
       </div>
+    </div>
 
-      <h3>Service Scan Options</h3>
-
+    <div id="service-scan" class="content-tab">
       <div class="field">
         <label class="has-text-weight-semibold">Service Scan:</label>
         <input class="checkbox" type="checkbox" name="service_scan"<%= " checked" if params[:service_scan] %>>
@@ -394,16 +405,13 @@
       </div>
 
       <div class="field">
-        <label class="label">Version Intensity</label>
-
-        <div class="control">
-          <select name="nsock_engine">
-            <option<%= " selected" unless params[:version_intensity] %>></option>
-            <% (0..9).each do |level| %>
-            <option value="<%= level %>"<%= " selected" if params[:version_intensity] == level.to_s %>><%= level %></option>
-            <% end %>
-          </select>
-        </div>
+        <label class="has-text-weight-semibold">Version Intensity</label>
+        <select name="nsock_engine ">
+          <option<%= " selected" unless params[:version_intensity] %>></option>
+          <% (0..9).each do |level| %>
+          <option value="<%= level %>"<%= " selected" if params[:version_intensity] == level.to_s %>><%= level %></option>
+          <% end %>
+        </select>
       </div>
 
       <div class="field">
@@ -420,9 +428,9 @@
         <label class="has-text-weight-semibold">Version Scan Trace:</label>
         <input class="checkbox" type="checkbox" name="version_trace"<%= " checked" if params[:version_trace] %>>
       </div>
+    </div>
 
-      <h3>OS Detection Options</h3>
-
+    <div id="os-detection" class="content-tab">
       <div class="field">
         <label class="has-text-weight-semibold">OS Fingerprint:</label>
         <input class="checkbox" type="checkbox" name="os_fingerprint"<%= " checked" if params[:os_fingerprint] %>>
@@ -447,9 +455,9 @@
         <label class="has-text-weight-semibold">Max OS Tries:</label>
         <input class="checkbox" type="checkbox" name="max_os_tries"<%= " checked" if params[:max_os_tries] %>>
       </div>
+    </div>
 
-      <h3>Timing and Performance Options</h3>
-
+    <div id="timing-and-performance" class="content-tab">
       <div class="field">
         <label class="label">Minimum Host Group:</label>
 
@@ -685,38 +693,32 @@
       </div>
 
       <div class="field">
-        <label class="label">NSock Engine:</label>
-
-        <div class="control">
-          <select name="nsock_engine">
-            <option<%= " selected" unless params[:nsock_engine] %>></option>
-            <option value="iocp"<%= " selected" if params[:nsock_engine] == 'iocp' %>>iocp</option>
-            <option value="epoll"<%= " selected" if params[:nsock_engine] == 'epoll' %>>epoll</option>
-            <option value="kqueue"<%= " selected" if params[:nsock_engine] == 'kqueue' %>>kqueue</option>
-            <option value="poll"<%= " selected" if params[:nsock_engine] == 'poll' %>>poll</option>
-            <option value="select"<%= " selected" if params[:nsock_engine] == 'select' %>>select</option>
-          </select>
-        </div>
+        <label class="has-text-weight-semibold">NSock Engine:</label>
+        <select name="nsock_engine">
+          <option<%= " selected" unless params[:nsock_engine] %>></option>
+          <option value="iocp"<%= " selected" if params[:nsock_engine] == 'iocp' %>>iocp</option>
+          <option value="epoll"<%= " selected" if params[:nsock_engine] == 'epoll' %>>epoll</option>
+          <option value="kqueue"<%= " selected" if params[:nsock_engine] == 'kqueue' %>>kqueue</option>
+          <option value="poll"<%= " selected" if params[:nsock_engine] == 'poll' %>>poll</option>
+          <option value="select"<%= " selected" if params[:nsock_engine] == 'select' %>>select</option>
+        </select>
       </div>
 
       <div class="field">
-        <label class="label">Timing Template:</label>
-
-        <div class="control">
-          <select name="timing_template">
-            <option<%= " selected" unless params[:timing_template] %>></option>
-            <option value="paranoid"<%= " selected" if params[:timing_template] == 'paranoid' %>>paranoid</option>
-            <option value="sneaky"<%= " selected" if params[:timing_template] == 'sneaky' %>>sneaky</option>
-            <option value="polite"<%= " selected" if params[:timing_template] == 'polite' %>>polite</option>
-            <option value="normal"<%= " selected" if params[:timing_template] == 'normal' %>>normal</option>
-            <option value="aggressive"<%= " selected" if params[:timing_template] == 'aggressive' %>>aggressive</option>
-            <option value="insane"<%= " selected" if params[:timing_template] == 'insane' %>>insane</option>
-          </select>
-        </div>
+        <label class="has-text-weight-semibold">Timing Template:</label>
+        <select name="timing_template">
+          <option<%= " selected" unless params[:timing_template] %>></option>
+          <option value="paranoid"<%= " selected" if params[:timing_template] == 'paranoid' %>>paranoid</option>
+          <option value="sneaky"<%= " selected" if params[:timing_template] == 'sneaky' %>>sneaky</option>
+          <option value="polite"<%= " selected" if params[:timing_template] == 'polite' %>>polite</option>
+          <option value="normal"<%= " selected" if params[:timing_template] == 'normal' %>>normal</option>
+          <option value="aggressive"<%= " selected" if params[:timing_template] == 'aggressive' %>>aggressive</option>
+          <option value="insane"<%= " selected" if params[:timing_template] == 'insane' %>>insane</option>
+        </select>
       </div>
+    </div>
 
-      <h3>Evasion and Spoofing Options</h3>
-
+    <div id="evasion-and-spoofing" class="content-tab">
       <div class="field">
         <label class="has-text-weight-semibold">Packet Fragments:</label>
         <input class="checkbox" type="checkbox" name="packet_fragments"<%= " checked" if params[:packet_fragments] %>>
@@ -917,9 +919,9 @@
         <label class="has-text-weight-semibold">SCTP Adler32:</label>
         <input class="checkbox" type="checkbox" name="sctp_adler32"<%= " checked" if params[:sctp_adler32] %>>
       </div>
+    </div>
 
-      <h3>Misc Options</h3>
-
+    <div id="misc" class="content-tab">
       <div class="field">
         <label class="has-text-weight-semibold">IPv6 Scanning:</label>
         <input class="checkbox" type="checkbox" name="ipv6"<%= " checked" if params[:ipv6] %>>

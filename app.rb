@@ -27,8 +27,8 @@ require 'sinatra/flash'
 require 'sinatra/reloader'
 
 # configuration
-require './config/database'
-require './config/sidekiq'
+require_relative 'config/database'
+require_relative 'config/sidekiq'
 
 # ronin libraries
 require 'ronin/repos'
@@ -39,6 +39,7 @@ require 'ronin/support/encoding'
 # param validations
 require 'ronin/app/validations/install_repo_params'
 require 'ronin/app/validations/import_params'
+require 'ronin/app/validations/http_params'
 
 # schema builders
 require 'ronin/app/schemas/payloads/encoders/encode_schema'
@@ -48,12 +49,12 @@ require 'ronin/app/schemas/payloads/build_schema'
 require 'ronin/app/helpers/html'
 
 # worker classes
-require './workers/install_repo'
-require './workers/update_repo'
-require './workers/update_repos'
-require './workers/remove_repo'
-require './workers/purge_repos'
-require './workers/import'
+require_relative 'workers/install_repo'
+require_relative 'workers/update_repo'
+require_relative 'workers/update_repos'
+require_relative 'workers/remove_repo'
+require_relative 'workers/purge_repos'
+require_relative 'workers/import'
 
 require 'ronin/app/version'
 require 'sidekiq/api'
@@ -84,6 +85,10 @@ class App < Sinatra::Base
 
   helpers do
     include Pagy::Frontend
+  end
+
+  after do
+    ActiveRecord::Base.connection_handler.clear_active_connections!
   end
 
   get '/' do
@@ -297,7 +302,7 @@ class App < Sinatra::Base
     erb :"exploits/index"
   end
 
-  get %r{/exploits(?<exploit_id>[a-z0-9_-]+(?:/[a-z0-9_-]+)*)} do
+  get %r{/exploits/(?<exploit_id>[A-Za-z0-9_-]+(?:/[A-Za-z0-9_-]+)*)} do
     @exploit = Ronin::Exploits.load_class(params[:exploit_id])
 
     erb :"exploits/show"
@@ -348,6 +353,28 @@ class App < Sinatra::Base
     end
 
     erb :queue
+  end
+
+  get '/network/http' do
+    erb :"network/http"
+  end
+
+  post '/network/http' do
+    result = Validations::HTTPParams.call(params)
+
+    if result.success?
+      kwargs = result.to_h
+      method = kwargs.delete(:method)
+      url    = kwargs.delete(:url)
+
+      @http_response = Ronin::Support::Network::HTTP.request(method,url,**kwargs)
+
+      erb :"network/http"
+    else
+      @params = params
+      @errors = result.errors
+      halt 400, erb(:"network/http")
+    end
   end
 
   private

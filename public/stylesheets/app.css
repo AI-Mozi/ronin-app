@@ -16,6 +16,7 @@ body {
 
 main {
 	clear: both;
+	min-height: 70vh;
 }
 
 header {
@@ -23,6 +24,13 @@ header {
 	background-color: black;
 }
 
+#logo {
+	margin: 0.5em;
+}
+
+/*
+ * Top nav menu rules.
+ */
 nav#top-menu {
 	margin-left: auto;
 	padding: 0.5em 0.5em;
@@ -53,10 +61,10 @@ button#dark-mode-toggle svg#dark-mode-moon {
 	display: none;
 }
 
-#logo {
-	margin: 0.5em;
-}
-
+/*
+ * Navbar rules.
+ * https://bulma.io/documentation/components/navbar/
+ */
 nav.navbar {
 	font-size: 140%;
 }
@@ -70,6 +78,18 @@ nav.navbar a:hover {
 	color: black;
 }
 
+nav.navbar .navbar-dropdown {
+	background-color: black;
+	padding-top: 0;
+	border-top: 0;
+}
+
+nav.navbar .navbar-dropdown {
+	background-color: black;
+	padding-top: 0;
+	border-top: 0;
+}
+
 main > nav.breadcrumb {
 	margin-top: 1em;
 }
@@ -78,6 +98,9 @@ main > nav.breadcrumb a {
 	color: var(--fg-color);
 }
 
+/*
+ * Content rules.
+ */
 .content {
 	margin-top: 1em;
 	margin-bottom: 1em;
@@ -107,28 +130,68 @@ main > nav.breadcrumb a {
 	overflow-x: auto;
 }
 
-.content .advanced {
-	transition: all 0.2s ease-in-out;
-	overflow: hidden;
+
+.content .label.is-required::after,
+.content .control.is-required::after {
+	content: "*";
+	color: red;
+	display: inline;
+	font-size: 1.2rem;
 }
 
-.content .advanced > a.advanced-toggle {
-	border-bottom: 1px solid #c3c3c3;
+.content .control.is-required::after {
+	position: absolute;
+	right: 0.2rem;
+	top: 0;
 }
 
-.content .advanced.hidden > .advanced-content {
+/*
+ * Content Tab rules.
+ */
+.content .tabs {
+	margin: 0 !important;
+}
+
+.content .tabs-content {
+	padding: 1rem 1.5rem !important;
+}
+
+.content .tabs ul {
+	margin: 0 !important;
+	border: none;
+}
+
+.content .tabs ul li {
+	padding: 4px 0;
+}
+
+.content .tabs ul li a {
+	text-decoration: none;
+}
+
+.content .tabs ul li a:hover {
+	background-color: var(--fg-color);
+}
+
+.content .content-tab {
 	display: none;
+}
+
+.content .content-tab.is-active {
+	display: block;
 }
 
 footer.footer {
 	clear: both;
-	margin-top: 10rem;
 	color: gray;
 	background-color: var(--fg-color);
 	font-size: medium;
 	background-color: black;
 }
 
+/*
+ * Dark-mode rules.
+ */
 body.dark-mode {
 	color: var(--dark-mode-fg-color);
 	background-color: var(--dark-mode-bg-color);
@@ -158,24 +221,9 @@ body.dark-mode main a {
 	color: var(--dark-mode-fg-color);
 }
 
-.label.is-required::after,
-.control.is-required::after {
-	content: "*";
-	color: red;
-	display: inline;
-	font-size: 1.2rem;
-}
-
-.control.is-required::after {
-	position: absolute;
-	right: 0.2rem;
-	top: 0;
-}
-
-.navbar-dropdown {
-	background-color: black;
-	padding-top: 0;
-	border-top: 0;
+body.dark-mode .content .tabs ul li a:hover {
+	color: var(--dark-mode-bg-color);
+	background-color: var(--dark-mode-fg-color);
 }
 
 body.dark-mode .dropdown-content {

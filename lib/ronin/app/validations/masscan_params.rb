@@ -18,9 +18,9 @@
 # along with ronin-app.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-require 'dry/validation'
-require 'ronin/app/types'
+require_relative '../types'
 
+require 'dry/validation'
 require 'masscan/command'
 
 module Ronin
@@ -33,8 +33,8 @@ module Ronin
 
         params do
           required(:ips).filled(Types::Args).each(:filled?)
+          required(:ports).filled(:string)
 
-          optional(:ports).maybe(:string)
           optional(:banners).maybe(:bool)
           optional(:rate).maybe(:integer)
           optional(:config_file).maybe(:string)

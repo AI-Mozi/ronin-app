@@ -9,7 +9,8 @@
 ronin-app is a small web application that is meant to be ran locally by the
 user. It provides a web interface to [ronin-support], [ronin-repos], [ronin-db],
 [ronin-payloads], [ronin-exploits], as well as automating
-[ronin-nmap], [ronin-masscan], and [ronin-web-spider].
+[ronin-nmap], [ronin-masscan], [ronin-web-spider], [ronin-recon], and
+[ronin-vulns].
 
 ## Features
 
@@ -22,8 +23,64 @@ user. It provides a web interface to [ronin-support], [ronin-repos], [ronin-db],
   into the [ronin database][ronin-db].
 * Supports automating [spidering websites][ronin-web-spider] and importing all
   visited URLs into the [ronin database][ronin-db].
+* Supports performing recon using [ronin-recon] and importing all discovered
+  hostnames, IPs, and URLs into [ronin database][ronin-db].
+* Supports testing URLs for web vulnerabilities using [ronin-vulns].
 * Small memory footprint (~184K).
 * Fast (~1.251ms response time).
+
+## Screenshots
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_scanning_nmap.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_scanning_masscan.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_scanning_recon.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_scanning_spider.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_scanning_vulns.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_db.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_db_ip_address.svg" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_repos.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_repos_show.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_payloads.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_payloads_show.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_payloads_build.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_exploits.svg" />
+      </td>
+      <td>
+        <img src="https://raw.githubusercontent.com/ronin-rb/ronin-app/main/screenshots/ronin_app_exploits_show.svg" />
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## Synopsis
 
@@ -54,7 +111,15 @@ http://localhost:1337, if ran in a real terminal.
 * [redis-server][redis] >= 6.2
 * [nmap]
 * [masscan]
-* [Ruby] >= 3.0.0
+* [Ruby] >= 3.1.0
+
+**Note:** both `nmap` and `masscan` require additional Linux capabilities in
+order to be ran without `sudo` or `root` privileges.
+
+```shell
+sudo setcap cap_net_raw,cap_net_admin,cap_net_bind_service+eip "$(which nmap)"
+sudo setcap cap_net_raw,cap_net_admin,cap_net_bind_service+eip "$(which masscan)"
+```
 
 ## Security
 
@@ -146,3 +211,5 @@ along with ronin-app.  If not, see <http://www.gnu.org/licenses/>.
 [ronin-nmap]: https://github.com/ronin-rb/ronin-nmap#readme
 [ronin-masscan]: https://github.com/ronin-rb/ronin-masscan#readme
 [ronin-web-spider]: https://github.com/ronin-rb/ronin-web-spider#readme
+[ronin-recon]: https://github.com/ronin-rb/ronin-recon#readme
+[ronin-vulns]: https://github.com/ronin-rb/ronin-vulns#readme
